@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>JARVIS</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#05080d;color:#eef3f8;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;height:100vh}
+    .app{height:100vh;display:flex;flex-direction:column;max-width:1100px;margin:auto}
+    header{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid #1c2630;background:#070b11}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.12em}
+    .orb{width:38px;height:38px;border-radius:50%;border:1px solid #4c6778;box-shadow:0 0 22px #42e8ff55;display:grid;place-items:center;color:#66edff}
+    .status{font-size:12px;color:#72f2b0;display:flex;gap:7px;align-items:center}
+    .dot{width:7px;height:7px;border-radius:50%;background:#72f2b0;box-shadow:0 0 10px #72f2b0}
+    #messages{flex:1;overflow:auto;padding:24px 18px 120px}
+    .msg{max-width:78%;margin:0 0 18px;padding:14px 16px;border:1px solid #1d2a34;border-radius:16px;line-height:1.55;white-space:pre-wrap}
+    .user{margin-left:auto;background:#101923;border-color:#294152}
+    .assistant{background:#080d13}
+    .label{font-size:10px;letter-spacing:.14em;color:#6e8493;margin-bottom:6px;text-transform:uppercase}
+    .composer{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);width:min(1060px,calc(100% - 28px));display:flex;gap:10px;padding:10px;background:#0a1017dd;border:1px solid #263540;border-radius:18px;backdrop-filter:blur(14px)}
+    textarea{flex:1;resize:none;min-height:46px;max-height:140px;border:0;outline:0;background:transparent;color:#fff;padding:12px;font:inherit}
+    button{border:0;border-radius:13px;padding:0 20px;background:#eaf2f7;color:#071018;font-weight:800;cursor:pointer}
+    button:disabled{opacity:.45;cursor:not-allowed}
+    .welcome{text-align:center;padding-top:18vh;color:#7f929f}
+    .welcome h1{color:#edf6fa;letter-spacing:.18em}
+    @media(max-width:650px){.msg{max-width:90%}.composer{bottom:10px}.app{width:100%}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand"><div class="orb">◉</div>JARVIS</div>
+      <div class="status"><span class="dot"></span>ONLINE</div>
+    </header>
+    <main id="messages">
+      <div class="welcome" id="welcome">
+        <h1>JARVIS</h1>
+        <p>Your AI assistant is ready.</p>
+      </div>
+    </main>
+    <form class="composer" id="form">
+      <textarea id="input" rows="1" placeholder="Message JARVIS..."></textarea>
+      <button id="send" type="submit">SEND</button>
+    </form>
+  </div>
+  <script src="/chat.js"></script>
+</body>
+</html>
