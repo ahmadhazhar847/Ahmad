@@ -1,83 +1,206 @@
 <!doctype html>
 <html lang="ku" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#05070b" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05080d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="JARVIS" />
   <title>JARVIS AI</title>
+
   <style>
-    *{box-sizing:border-box}body{margin:0;background:#05070b;color:#eef5fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    .app{max-width:760px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:18px;background:radial-gradient(circle at top,#102333 0,#080b10 35%,#05070b 72%)}
-    header{display:flex;justify-content:space-between;align-items:center;padding:10px 0 18px;border-bottom:1px solid #18212b}
-    h1{margin:0;font-size:20px;letter-spacing:4px}.online{font-size:12px;color:#36e6a1}
-    #chat{flex:1;overflow:auto;padding:22px 0;display:flex;flex-direction:column;gap:12px}
-    .msg{max-width:88%;padding:12px 14px;border-radius:18px;line-height:1.6;white-space:pre-wrap}
-    .user{align-self:flex-start;background:#123047}.ai{align-self:flex-end;background:#111820;border:1px solid #1d2a35}
-    form{display:flex;gap:8px;padding:10px 0}
-    input{flex:1;min-width:0;border-radius:24px;border:1px solid #1d2a35;background:#0d141b;color:white;padding:14px 16px;font-size:16px}
-    button{border:0;border-radius:50%;width:48px;height:48px;background:#14384d;color:white;font-size:18px}
-    .hint{font-size:12px;color:#6e8190;text-align:center;padding-bottom:6px}
+    :root{
+      --bg:#05080d;
+      --panel:#0b1118;
+      --panel2:#0f1720;
+      --line:#1d2c38;
+      --text:#edf7ff;
+      --muted:#7f94a5;
+      --cyan:#42d7ff;
+      --cyan2:#1d8cb7;
+      --green:#39e69b;
+      --danger:#ff687a;
+    }
+
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+    body{min-height:100dvh;overflow:hidden}
+
+    .app{
+      width:100%;
+      max-width:760px;
+      height:100dvh;
+      margin:auto;
+      display:flex;
+      flex-direction:column;
+      padding:
+        calc(env(safe-area-inset-top) + 10px)
+        14px
+        calc(env(safe-area-inset-bottom) + 8px);
+      background:
+        radial-gradient(circle at 50% -8%, rgba(41,140,181,.22), transparent 34%),
+        linear-gradient(180deg,#070b11 0%,#05080d 100%);
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      min-height:68px;
+      border-bottom:1px solid var(--line);
+      gap:12px;
+    }
+
+    .identity{display:flex;align-items:center;gap:12px}
+    .mini-orb{
+      width:44px;height:44px;border-radius:50%;
+      border:1px solid rgba(66,215,255,.75);
+      position:relative;
+      box-shadow:0 0 20px rgba(66,215,255,.18), inset 0 0 18px rgba(66,215,255,.08);
+    }
+    .mini-orb::before{
+      content:"";position:absolute;inset:8px;border:1px solid rgba(66,215,255,.6);
+      border-radius:50%;animation:pulse 2.2s infinite;
+    }
+    .mini-orb::after{
+      content:"";position:absolute;width:7px;height:7px;border-radius:50%;
+      background:var(--cyan);left:17px;top:17px;box-shadow:0 0 14px var(--cyan);
+    }
+
+    h1{margin:0;font-size:18px;letter-spacing:4px;font-weight:700}
+    .online{font-size:11px;color:var(--muted);margin-top:4px}
+    .online b{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 9px rgba(57,230,155,.8);margin-left:5px}
+
+    .icon-btn{
+      width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+      background:rgba(14,22,30,.86);color:#b7c7d4;font-size:17px;
+    }
+
+    .hero{
+      padding:18px 0 7px;text-align:center;
+    }
+    .orb{
+      width:86px;height:86px;margin:0 auto 12px;border-radius:50%;
+      border:1px solid rgba(66,215,255,.78);position:relative;
+      box-shadow:0 0 34px rgba(66,215,255,.14), inset 0 0 28px rgba(66,215,255,.08);
+    }
+    .orb::before{
+      content:"";position:absolute;inset:11px;border-radius:50%;
+      border:1px solid rgba(66,215,255,.58);animation:pulse 2.3s infinite;
+    }
+    .orb::after{
+      content:"";position:absolute;inset:31px;border-radius:50%;
+      background:var(--cyan);box-shadow:0 0 28px rgba(66,215,255,.9);
+    }
+    .hero h2{font-size:18px;margin:0 0 4px}
+    .hero p{font-size:12px;color:var(--muted);margin:0}
+
+    .chat{
+      flex:1;
+      min-height:0;
+      overflow-y:auto;
+      padding:10px 1px 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      scroll-behavior:smooth;
+    }
+
+    .message{max-width:88%;display:flex;flex-direction:column}
+    .message.user{align-self:flex-start;align-items:flex-start}
+    .message.ai{align-self:flex-end;align-items:flex-end}
+    .who{font-size:10px;color:#607586;margin:0 7px 4px}
+    .bubble{
+      padding:12px 14px;border-radius:18px;line-height:1.75;
+      font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere;
+    }
+    .user .bubble{
+      background:linear-gradient(180deg,#12334a,#102c40);
+      border:1px solid #1c506b;border-bottom-left-radius:5px;
+    }
+    .ai .bubble{
+      background:linear-gradient(180deg,#101820,#0d141b);
+      border:1px solid #1d2b36;border-bottom-right-radius:5px;
+    }
+
+    .typing{display:inline-flex;gap:5px;align-items:center;height:19px}
+    .typing i{
+      width:6px;height:6px;background:#7890a0;border-radius:50%;
+      animation:dot 1s infinite alternate;
+    }
+    .typing i:nth-child(2){animation-delay:.16s}.typing i:nth-child(3){animation-delay:.32s}
+
+    .quick{
+      display:flex;gap:7px;overflow-x:auto;padding:4px 0 7px;scrollbar-width:none;
+    }
+    .quick::-webkit-scrollbar{display:none}
+    .quick button{
+      flex:0 0 auto;border:1px solid var(--line);background:#0a1118;color:#9eb4c5;
+      border-radius:18px;padding:8px 12px;font-size:12px;
+    }
+
+    .composer{
+      display:flex;gap:8px;align-items:center;padding:5px 0 4px;
+    }
+    .composer input{
+      flex:1;min-width:0;background:#0b1219;border:1px solid #1c2b36;color:#fff;
+      border-radius:24px;padding:13px 16px;font-size:16px;outline:none;
+    }
+    .composer input:focus{border-color:#287ca3;box-shadow:0 0 0 2px rgba(66,215,255,.06)}
+    .round,.send{
+      flex:0 0 auto;width:46px;height:46px;border-radius:50%;
+      border:1px solid #223441;color:#e6f5ff;font-size:18px;
+    }
+    .round{background:#0a1219}.send{background:#12384d;border-color:#27617d}
+    .round.listening{border-color:var(--danger);box-shadow:0 0 18px rgba(255,104,122,.25)}
+    .status{text-align:center;color:#536b7b;font-size:10px;min-height:16px;padding-top:1px}
+
+    @keyframes pulse{50%{transform:scale(1.16);opacity:.45}}
+    @keyframes dot{to{transform:translateY(-4px);opacity:.45}}
   </style>
 </head>
+
 <body>
   <main class="app">
-    <header>
-      <div><h1>JARVIS</h1><div class="online">● Online</div></div>
-      <div>AI</div>
+    <header class="topbar">
+      <div class="identity">
+        <div class="mini-orb"></div>
+        <div>
+          <h1>JARVIS</h1>
+          <div class="online"><b></b> Workers AI Online</div>
+        </div>
+      </div>
+      <button id="clearBtn" class="icon-btn" aria-label="Clear chat">⌫</button>
     </header>
 
-    <section id="chat">
-      <div class="msg ai">سڵاو، من JARVIS ـم. چی دەتەوێت بۆت بکەم؟</div>
+    <section class="hero" id="hero">
+      <div class="orb"></div>
+      <h2>سڵاو، من JARVIS ـم.</h2>
+      <p>فەرمانەکەت بنووسە؛ وەڵامەکە بە ڕاستەوخۆ لە Workers AI دێت.</p>
     </section>
 
-    <form id="form">
-      <input id="input" autocomplete="off" placeholder="فەرمانەکەت بنووسە..." />
-      <button type="submit">➤</button>
+    <section id="chat" class="chat" aria-live="polite"></section>
+
+    <section class="quick">
+      <button data-prompt="تۆ چی دەتوانیت بۆ من بکەیت؟">تواناکانت</button>
+      <button data-prompt="یارمەتیم بدە project ـێکی نوێ پلان بکەم.">Project</button>
+      <button data-prompt="Database ـێکی باش بۆ سیستەمی فرۆشتن پلان بکە.">Database</button>
+      <button data-prompt="نمونەی کۆدێکی پاک و ڕێکخراو بۆم بنووسە.">Code</button>
+    </section>
+
+    <form id="composer" class="composer">
+      <button id="micBtn" type="button" class="round" aria-label="Voice input">🎙️</button>
+      <input id="messageInput" autocomplete="off" inputmode="text"
+             placeholder="فەرمانەکەت بنووسە..." />
+      <button id="sendBtn" type="submit" class="send" aria-label="Send">➤</button>
     </form>
-    <div class="hint" id="status">Workers AI</div>
+
+    <div id="status" class="status">JARVIS ئامادەیە</div>
   </main>
 
-<script>
-const chat = document.getElementById("chat");
-const form = document.getElementById("form");
-const input = document.getElementById("input");
-const status = document.getElementById("status");
-const messages = [];
-
-function add(text, cls){
-  const el = document.createElement("div");
-  el.className = "msg " + cls;
-  el.textContent = text;
-  chat.appendChild(el);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const text = input.value.trim();
-  if(!text) return;
-
-  add(text, "user");
-  messages.push({role:"user", content:text});
-  input.value = "";
-  status.textContent = "JARVIS بیر دەکاتەوە...";
-
-  try{
-    const r = await fetch("/api/chat", {
-      method:"POST",
-      headers:{"content-type":"application/json"},
-      body:JSON.stringify({messages})
-    });
-    const data = await r.json();
-    const answer = data.response || data.error || "وەڵامێک نەگەیشت.";
-    add(answer, "ai");
-    messages.push({role:"assistant", content:answer});
-  }catch(err){
-    add("کێشەی پەیوەندی هەیە. دووبارە هەوڵ بدە.", "ai");
-  }finally{
-    status.textContent = "Workers AI";
-  }
-});
-</script>
+  <script src="/chat.js"></script>
 </body>
 </html>
